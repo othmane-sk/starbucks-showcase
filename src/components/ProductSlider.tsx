@@ -196,19 +196,6 @@ const ProductSlider = () => {
           </svg>
         </button>
 
-        {/* Mobile arrows */}
-        <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-4 md:hidden z-10">
-          <button onClick={prev} aria-label="Previous" className="nav-arrow-base relative !top-auto !translate-y-0 !w-12 !h-12">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button onClick={next} aria-label="Next" className="nav-arrow-base relative !top-auto !translate-y-0 !w-12 !h-12">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
       </main>
     </div>
   );
