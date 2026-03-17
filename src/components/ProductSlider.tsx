@@ -189,7 +189,7 @@ const ProductSlider = () => {
         <button
           onClick={next}
           aria-label="Next"
-          className="nav-arrow-base right-4 md:right-16 hidden md:flex"
+          className="nav-arrow-base right-4 md:right-16"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path d="M9 5l7 7-7 7" />
