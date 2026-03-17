@@ -69,11 +69,11 @@ const ProductSlider = () => {
   const currentBg = `hsl(var(${products[currentIndex].bgVar}))`;
   const prevBg = prevIndex !== null ? `hsl(var(${products[prevIndex].bgVar}))` : currentBg;
 
-  // Clip-path: color comes FROM the direction opposite to arrow clicked
-  // Right arrow → new color sweeps from LEFT; Left arrow → new color sweeps from RIGHT
+  // Right arrow → color & product sweep from left to right
+  // Left arrow → color & product sweep from right to left
   const clipFrom = direction === "right"
-    ? "inset(0 100% 0 0)"
-    : "inset(0 0 0 100%)";
+    ? "inset(0 0 0 100%)"
+    : "inset(0 100% 0 0)";
   const clipTo = "inset(0 0 0 0)";
 
   return (
