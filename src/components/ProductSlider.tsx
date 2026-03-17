@@ -1,6 +1,5 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import starbucksLogo from "@/assets/starbucks-logo2.png";
-import hojichaImg from "@/assets/hojicha.png";
 import sakuraImg from "@/assets/sakura-latte.png";
 import matchaImg from "@/assets/matcha-latte-macchiato.png";
 import strawberryImg from "@/assets/strawberry-s.png";
@@ -14,12 +13,6 @@ interface Product {
 }
 
 const products: Product[] = [
-  {
-    name: "Hojicha Latte",
-    desc: "Rich, roasted Japanese green tea latte with a smooth, earthy flavor and a toasted aroma that lingers warmly.",
-    img: hojichaImg,
-    bgVar: "--bg-hojicha",
-  },
   {
     name: "Sakura Latte",
     desc: "Delicate cherry blossom-inspired latte with subtle floral notes and a whisper of spring sweetness.",
@@ -48,44 +41,69 @@ const products: Product[] = [
 
 const ProductSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState<number | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [direction, setDirection] = useState<"left" | "right">("right");
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const goTo = useCallback(
-    (next: number) => {
+    (next: number, dir: "left" | "right") => {
       if (isTransitioning) return;
+      setDirection(dir);
+      setPrevIndex(currentIndex);
       setIsTransitioning(true);
       setCurrentIndex(next);
-      setTimeout(() => setIsTransitioning(false), 900);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        setIsTransitioning(false);
+        setPrevIndex(null);
+      }, 1200);
     },
-    [isTransitioning]
+    [isTransitioning, currentIndex]
   );
 
   const prev = () =>
-    goTo((currentIndex - 1 + products.length) % products.length);
-  const next = () => goTo((currentIndex + 1) % products.length);
+    goTo((currentIndex - 1 + products.length) % products.length, "left");
+  const next = () => goTo((currentIndex + 1) % products.length, "right");
 
-  const activeBg = `hsl(var(${products[currentIndex].bgVar}))`;
+  const currentBg = `hsl(var(${products[currentIndex].bgVar}))`;
+  const prevBg = prevIndex !== null ? `hsl(var(${products[prevIndex].bgVar}))` : currentBg;
+
+  // Clip-path: color comes FROM the direction opposite to arrow clicked
+  // Right arrow → new color sweeps from LEFT; Left arrow → new color sweeps from RIGHT
+  const clipFrom = direction === "right"
+    ? "inset(0 100% 0 0)"
+    : "inset(0 0 0 100%)";
+  const clipTo = "inset(0 0 0 0)";
 
   return (
-    <div
-      className="relative h-screen w-screen overflow-hidden font-body"
-      style={{
-        backgroundColor: activeBg,
-        transition: "background-color 0.9s cubic-bezier(0.76, 0, 0.24, 1)",
-      }}
-    >
+    <div className="relative h-screen w-screen overflow-hidden font-body">
+      {/* Background layers for directional wipe */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{ backgroundColor: prevBg }}
+      />
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundColor: currentBg,
+          clipPath: isTransitioning ? clipTo : clipTo,
+          animation: isTransitioning
+            ? `colorWipe-${direction} 1.2s cubic-bezier(0.76, 0, 0.24, 1) forwards`
+            : undefined,
+        }}
+      />
+
       {/* Header */}
-      <header className="fixed top-0 w-full px-6 md:px-16 py-6 flex justify-between items-center z-50">
-        <img src={starbucksLogo} alt="Starbucks" className="h-10 w-auto" />
-        <nav className="flex items-center gap-6 text-xs uppercase tracking-widest text-muted-foreground">
-          <span>Portfolio Showcase</span>
-          <div className="w-10 h-px bg-border" />
-          <span>Spring 2024</span>
-        </nav>
+      <header className="fixed top-0 w-full px-6 md:px-16 py-5 flex justify-between items-center z-50">
+        <img src={starbucksLogo} alt="Starbucks" className="h-14 md:h-16 w-auto" />
+        <span className="font-display text-lg md:text-xl tracking-wide text-foreground">
+          Brew Studio
+        </span>
       </header>
 
       {/* Slider */}
-      <main className="relative h-full flex items-center justify-center">
+      <main className="relative h-full flex items-center justify-center z-10">
         {/* Prev Arrow */}
         <button
           onClick={prev}
@@ -108,7 +126,7 @@ const ProductSlider = () => {
                 style={{
                   opacity: isActive ? 1 : 0,
                   pointerEvents: isActive ? "all" : "none",
-                  transition: `opacity 0.9s cubic-bezier(0.76, 0, 0.24, 1)`,
+                  transition: `opacity 1s cubic-bezier(0.76, 0, 0.24, 1)`,
                 }}
               >
                 {/* Text */}
@@ -118,19 +136,19 @@ const ProductSlider = () => {
                     transform: isActive ? "translateY(0)" : "translateY(30px)",
                     opacity: isActive ? 1 : 0,
                     transition:
-                      "transform 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.1s, opacity 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.1s",
+                      "transform 1s cubic-bezier(0.76, 0, 0.24, 1) 0.15s, opacity 1s cubic-bezier(0.76, 0, 0.24, 1) 0.15s",
                   }}
                 >
                   <h2 className="font-display text-5xl md:text-7xl lg:text-[5.5rem] leading-[0.9] mb-8 text-foreground">
                     {product.name}
                   </h2>
                   <p
-                    className="text-lg leading-relaxed text-muted-foreground"
+                    className="text-base md:text-lg leading-relaxed text-muted-foreground"
                     style={{
                       transform: isActive ? "translateY(0)" : "translateY(20px)",
                       opacity: isActive ? 1 : 0,
                       transition:
-                        "transform 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.2s, opacity 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.2s",
+                        "transform 1s cubic-bezier(0.76, 0, 0.24, 1) 0.25s, opacity 1s cubic-bezier(0.76, 0, 0.24, 1) 0.25s",
                     }}
                   >
                     {product.desc}
@@ -149,7 +167,7 @@ const ProductSlider = () => {
                         ? "scale(1) translateX(0)"
                         : "scale(0.8) translateX(50px)",
                       transition:
-                        "transform 0.9s cubic-bezier(0.76, 0, 0.24, 1)",
+                        "transform 1s cubic-bezier(0.76, 0, 0.24, 1)",
                     }}
                   />
                 </div>
@@ -183,21 +201,6 @@ const ProductSlider = () => {
           </button>
         </div>
       </main>
-
-      {/* Pagination */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4 text-xs font-medium text-muted-foreground tracking-widest z-50 hidden md:flex">
-        <span>{String(currentIndex + 1).padStart(2, "0")}</span>
-        <div className="w-24 h-px bg-border relative overflow-hidden">
-          <div
-            className="absolute inset-y-0 left-0 bg-foreground"
-            style={{
-              width: `${((currentIndex + 1) / products.length) * 100}%`,
-              transition: "width 0.9s cubic-bezier(0.76, 0, 0.24, 1)",
-            }}
-          />
-        </div>
-        <span>{String(products.length).padStart(2, "0")}</span>
-      </div>
     </div>
   );
 };
