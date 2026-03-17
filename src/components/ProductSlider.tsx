@@ -120,8 +120,8 @@ const ProductSlider = () => {
           {products.map((product, i) => {
             const isActive = i === currentIndex;
             const isPrev = i === prevIndex;
-            const slideOffset = direction === "right" ? "-100%" : "100%";
-            const enterFrom = direction === "right" ? "100%" : "-100%";
+            const slideOffset = direction === "right" ? "100%" : "-100%";
+            const enterFrom = direction === "right" ? "-100%" : "100%";
             return (
               <div
                 key={product.name}
