@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -49,8 +49,8 @@
     --timing: 0.9s;
 
     /* Typography */
-    --font-display: 'Instrument Serif', serif;
-    --font-body: 'Instrument Sans', sans-serif;
+    --font-display: 'DM Serif Display', serif;
+    --font-body: 'DM Sans', sans-serif;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -77,8 +77,9 @@
 
   h1, h2, h3 {
     font-family: var(--font-display);
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
     text-wrap: balance;
+    font-weight: 400;
   }
 }
 
@@ -92,4 +93,14 @@
     @apply bg-primary border-primary;
     color: hsl(var(--primary-foreground));
   }
+}
+
+/* Directional color wipe animations */
+@keyframes colorWipe-right {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+@keyframes colorWipe-left {
+  from { clip-path: inset(0 0 0 100%); }
+  to   { clip-path: inset(0 0 0 0); }
 }
