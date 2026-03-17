@@ -87,7 +87,7 @@ const ProductSlider = () => {
         className="absolute inset-0 z-0"
         style={{
           backgroundColor: currentBg,
-          clipPath: isTransitioning ? clipTo : clipTo,
+          clipPath: isTransitioning ? undefined : clipTo,
           animation: isTransitioning
             ? `colorWipe-${direction} 1.2s cubic-bezier(0.76, 0, 0.24, 1) forwards`
             : undefined,
