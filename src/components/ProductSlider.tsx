@@ -97,8 +97,8 @@ const ProductSlider = () => {
       {/* Header */}
       <header className="fixed top-0 w-full px-6 md:px-16 py-5 flex justify-between items-center z-50">
         <img src={starbucksLogo} alt="Starbucks" className="h-14 md:h-16 w-auto" />
-        <span className="font-display text-lg md:text-xl tracking-wide text-foreground">
-          Brew Studio
+        <span className="font-body text-lg md:text-xl font-bold tracking-wide text-foreground">
+          ODJ Studio
         </span>
       </header>
 
