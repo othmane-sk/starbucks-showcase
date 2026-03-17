@@ -108,7 +108,7 @@ const ProductSlider = () => {
         <button
           onClick={prev}
           aria-label="Previous"
-          className="nav-arrow-base left-4 md:left-16 hidden md:flex"
+          className="nav-arrow-base left-4 md:left-16"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path d="M15 19l-7-7 7-7" />
