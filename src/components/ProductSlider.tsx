@@ -97,8 +97,8 @@ const ProductSlider = () => {
       {/* Header */}
       <header className="fixed top-0 w-full px-6 md:px-16 py-5 flex justify-between items-center z-50">
         <img src={starbucksLogo} alt="Starbucks" className="h-14 md:h-16 w-auto" />
-        <span className="font-display text-lg md:text-xl tracking-wide text-foreground">
-          Brew Studio
+        <span className="font-body text-lg md:text-xl font-bold tracking-wide text-foreground">
+          ODJ Studio
         </span>
       </header>
 
@@ -108,7 +108,7 @@ const ProductSlider = () => {
         <button
           onClick={prev}
           aria-label="Previous"
-          className="nav-arrow-base left-4 md:left-16 hidden md:flex"
+          className="nav-arrow-base left-4 md:left-16"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path d="M15 19l-7-7 7-7" />
@@ -119,14 +119,24 @@ const ProductSlider = () => {
         <div className="w-full h-full relative">
           {products.map((product, i) => {
             const isActive = i === currentIndex;
+            const isPrev = i === prevIndex;
+            const slideOffset = direction === "right" ? "-100%" : "100%";
+            const enterFrom = direction === "right" ? "100%" : "-100%";
             return (
               <div
                 key={product.name}
                 className="absolute inset-0 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] items-center px-6 md:px-24 lg:px-[10vw]"
                 style={{
-                  opacity: isActive ? 1 : 0,
                   pointerEvents: isActive ? "all" : "none",
-                  transition: `opacity 1s cubic-bezier(0.76, 0, 0.24, 1)`,
+                  transform: isActive
+                    ? "translateX(0)"
+                    : isPrev && isTransitioning
+                    ? `translateX(${slideOffset})`
+                    : `translateX(${enterFrom})`,
+                  opacity: isActive || (isPrev && isTransitioning) ? 1 : 0,
+                  transition: isActive || (isPrev && isTransitioning)
+                    ? "transform 1.2s cubic-bezier(0.76, 0, 0.24, 1), opacity 1.2s cubic-bezier(0.76, 0, 0.24, 1)"
+                    : "none",
                 }}
               >
                 {/* Text */}
@@ -135,8 +145,9 @@ const ProductSlider = () => {
                   style={{
                     transform: isActive ? "translateY(0)" : "translateY(30px)",
                     opacity: isActive ? 1 : 0,
-                    transition:
-                      "transform 1s cubic-bezier(0.76, 0, 0.24, 1) 0.15s, opacity 1s cubic-bezier(0.76, 0, 0.24, 1) 0.15s",
+                    transition: isActive
+                      ? "transform 1s cubic-bezier(0.76, 0, 0.24, 1) 0.2s, opacity 1s cubic-bezier(0.76, 0, 0.24, 1) 0.2s"
+                      : "transform 0.6s ease, opacity 0.6s ease",
                   }}
                 >
                   <h2 className="font-display text-5xl md:text-7xl lg:text-[5.5rem] leading-[0.9] mb-8 text-foreground">
@@ -147,8 +158,9 @@ const ProductSlider = () => {
                     style={{
                       transform: isActive ? "translateY(0)" : "translateY(20px)",
                       opacity: isActive ? 1 : 0,
-                      transition:
-                        "transform 1s cubic-bezier(0.76, 0, 0.24, 1) 0.25s, opacity 1s cubic-bezier(0.76, 0, 0.24, 1) 0.25s",
+                      transition: isActive
+                        ? "transform 1s cubic-bezier(0.76, 0, 0.24, 1) 0.35s, opacity 1s cubic-bezier(0.76, 0, 0.24, 1) 0.35s"
+                        : "transform 0.6s ease, opacity 0.6s ease",
                     }}
                   >
                     {product.desc}
@@ -163,11 +175,8 @@ const ProductSlider = () => {
                     className="w-48 md:w-64 lg:w-[340px] max-h-[70vh] object-contain"
                     style={{
                       filter: "drop-shadow(0 20px 50px rgba(0,0,0,0.08))",
-                      transform: isActive
-                        ? "scale(1) translateX(0)"
-                        : "scale(0.8) translateX(50px)",
-                      transition:
-                        "transform 1s cubic-bezier(0.76, 0, 0.24, 1)",
+                      transform: isActive ? "scale(1)" : "scale(0.85)",
+                      transition: "transform 1s cubic-bezier(0.76, 0, 0.24, 1)",
                     }}
                   />
                 </div>
@@ -180,26 +189,13 @@ const ProductSlider = () => {
         <button
           onClick={next}
           aria-label="Next"
-          className="nav-arrow-base right-4 md:right-16 hidden md:flex"
+          className="nav-arrow-base right-4 md:right-16"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path d="M9 5l7 7-7 7" />
           </svg>
         </button>
 
-        {/* Mobile arrows */}
-        <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-4 md:hidden z-10">
-          <button onClick={prev} aria-label="Previous" className="nav-arrow-base relative !top-auto !translate-y-0 !w-12 !h-12">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button onClick={next} aria-label="Next" className="nav-arrow-base relative !top-auto !translate-y-0 !w-12 !h-12">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
       </main>
     </div>
   );
