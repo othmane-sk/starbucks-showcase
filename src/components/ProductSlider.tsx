@@ -77,7 +77,7 @@ const ProductSlider = () => {
   const clipTo = "inset(0 0 0 0)";
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden font-body">
+    <div className="relative min-h-screen w-full overflow-hidden font-body">
       {/* Background layers for directional wipe */}
       <div
         className="absolute inset-0 z-0"
@@ -103,7 +103,7 @@ const ProductSlider = () => {
       </header>
 
       {/* Slider */}
-      <main className="relative h-full flex items-center justify-center z-10">
+      <main className="relative w-full min-h-screen flex items-center justify-center px-4 md:px-8 z-10 overflow-hidden">
         {/* Prev Arrow */}
         <button
           onClick={prev}
@@ -116,7 +116,7 @@ const ProductSlider = () => {
         </button>
 
         {/* Slides */}
-        <div className="w-full h-full relative">
+        <div className="w-full h-full relative overflow-hidden">
           {products.map((product, i) => {
             const isActive = i === currentIndex;
             const isPrev = i === prevIndex;
@@ -125,7 +125,7 @@ const ProductSlider = () => {
             return (
               <div
                 key={product.name}
-                className="absolute inset-0 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] items-center px-6 md:px-24 lg:px-[10vw]"
+                className="absolute inset-0 flex flex-col lg:flex-row items-center justify-center gap-8 px-4 md:px-8 lg:px-16"
                 style={{
                   pointerEvents: isActive ? "all" : "none",
                   transform: isActive
@@ -150,11 +150,11 @@ const ProductSlider = () => {
                       : "transform 0.6s ease, opacity 0.6s ease",
                   }}
                 >
-                  <h2 className="font-display text-5xl md:text-7xl lg:text-[5.5rem] leading-[0.9] mb-8 text-foreground">
+                  <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight mb-6 text-foreground text-center lg:text-left">
                     {product.name}
                   </h2>
                   <p
-                    className="text-base md:text-lg leading-relaxed text-muted-foreground"
+                    className="text-sm sm:text-base md:text-lg leading-relaxed text-muted-foreground text-center lg:text-left"
                     style={{
                       transform: isActive ? "translateY(0)" : "translateY(20px)",
                       opacity: isActive ? 1 : 0,
@@ -172,10 +172,10 @@ const ProductSlider = () => {
                   <img
                     src={product.img}
                     alt={product.name}
-                    className="w-48 md:w-64 lg:w-[340px] max-h-[70vh] object-contain"
+                    className="w-full max-w-[280px] sm:max-w-[340px] md:max-w-[420px] lg:max-w-[500px] h-auto object-contain"
                     style={{
                       filter: "drop-shadow(0 20px 50px rgba(0,0,0,0.08))",
-                      transform: isActive ? "scale(1)" : "scale(0.85)",
+                      transform: isActive ? "scale(1)" : "scale(0.92)",
                       transition: "transform 1s cubic-bezier(0.76, 0, 0.24, 1)",
                     }}
                   />

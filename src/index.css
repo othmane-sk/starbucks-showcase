@@ -69,7 +69,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-hidden;
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -85,8 +85,9 @@
 
 @layer utilities {
   .nav-arrow-base {
-    @apply absolute top-1/2 -translate-y-1/2 flex items-center justify-center w-16 h-16 rounded-full border border-border bg-transparent cursor-pointer z-10;
+    @apply absolute top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-border bg-white/70 backdrop-blur-md cursor-pointer z-10;
     transition: all 0.3s var(--transition-fast);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   }
 
   .nav-arrow-base:hover {
